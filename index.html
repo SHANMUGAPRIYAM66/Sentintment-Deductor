@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sentiment Detector</title>
+    <style>
+        body {
+            background-color: lightgreen;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            width: 300px;
+            margin: 100px auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+        textarea {
+            width: 100%;
+            height: 100px;
+            padding: 10px;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: red;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+        button:hover {
+            background-color: darkred;
+        }
+        .output {
+            margin: 10px 0;
+            padding: 10px;
+            font-size: 14px;
+            background-color: lightyellow;
+            border-radius: 5px;
+        }
+        .emoji {
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Sentiment Detector</h2>
+    <textarea id="textInput" placeholder="Enter Your Sentence"></textarea>
+    <button onclick="detectSentiment()">Check Sentiment</button>
+    <div class="output" id="negative">Negative Sentiment: <span class="emoji">😠</span></div>
+    <div class="output" id="neutral">Neutral Sentiment: <span class="emoji">😐</span></div>
+    <div class="output" id="positive">Positive Sentiment: <span class="emoji">😊</span></div>
+    <div class="output" id="overall">Overall Sentiment: <span class="emoji">😐</span></div>
+    <button onclick="clearAll()">Clear</button>
+</div>
+
+<script>
+    function detectSentiment() {
+        let text = document.getElementById("textInput").value.trim().toLowerCase();
+        let positiveWords = ["good", "great", "happy", "joy", "awesome", "love"];
+        let negativeWords = ["bad", "sad", "angry", "hate", "terrible", "awful"];
+        
+        let positiveCount = 0;
+        let negativeCount = 0;
+        let neutralCount = 0;
+        
+        let words = text.split(" ");
+        
+        // Simple word-based sentiment analysis
+        words.forEach(function(word) {
+            if (positiveWords.includes(word)) {
+                positiveCount++;
+            } else if (negativeWords.includes(word)) {
+                negativeCount++;
+            } else {
+                neutralCount++;
+            }
+        });
+        
+        // Calculating percentages
+        let totalWords = words.length;
+        let negativePercentage = (negativeCount / totalWords) * 100;
+        let neutralPercentage = (neutralCount / totalWords) * 100;
+        let positivePercentage = (positiveCount / totalWords) * 100;
+        
+        // Update the fields with sentiment scores
+        document.getElementById("negative").innerHTML = `Negative Sentiment: ${negativePercentage.toFixed(2)}% 😠`;
+        document.getElementById("neutral").innerHTML = `Neutral Sentiment: ${neutralPercentage.toFixed(2)}% 😐`;
+        document.getElementById("positive").innerHTML = `Positive Sentiment: ${positivePercentage.toFixed(2)}% 😊`;
+        
+        // Determine overall sentiment
+        if (positivePercentage > negativePercentage) {
+            document.getElementById("overall").innerHTML = `Overall Sentiment: 😊 Positive`;
+        } else if (negativePercentage > positivePercentage) {
+            document.getElementById("overall").innerHTML = `Overall Sentiment: 😠 Negative`;
+        } else {
+            document.getElementById("overall").innerHTML = `Overall Sentiment: 😐 Neutral`;
+        }
+    }
+
+    function clearAll() {
+        document.getElementById("textInput").value = "";
+        document.getElementById("negative").innerHTML = `Negative Sentiment: 😠`;
+        document.getElementById("neutral").innerHTML = `Neutral Sentiment: 😐`;
+        document.getElementById("positive").innerHTML = `Positive Sentiment: 😊`;
+        document.getElementById("overall").innerHTML = `Overall Sentiment: 😐 Neutral`;
+    }
+</script>
+
+</body>
+</html>
